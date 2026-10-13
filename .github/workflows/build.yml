@@ -30,15 +30,17 @@ jobs:
 
       - run: npm run build
 
-      # Only what the server needs, laid out like RockWeb/. Not all of ./Styles: the rest
-      # is Rock's own source, which the server already has from its Rock install.
+      # Only what the server needs, laid out like RockWeb/Themes/: built CSS and static
+      # assets, not the Less/Sass sources that produced them. Rock's own NextGen core
+      # styles (Styles/styles-v2/) aren't included either — the Rock install on the
+      # target server already has them.
       - uses: actions/upload-artifact@v4
         with:
           name: rock-themes-${{ github.sha }}
           path: |
             Themes/
-            Styles/styles-v2/core.css
-            Styles/styles-v2/icons/
+            !Themes/**/*.less
+            !Themes/**/*.scss
           if-no-files-found: error
 
   # Deployment comes later. Rock servers are usually Windows/IIS on a private network,

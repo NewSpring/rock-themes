@@ -40,16 +40,16 @@ If a theme compiles other files, add them to `.gitignore`.
 
 ## What ships to a server
 
-Copy these over `RockWeb/`, keeping their paths:
+Copy `Themes/<Name>/` for each theme over `RockWeb/Themes/<Name>/`, keeping paths — built
+CSS and static assets only, not the `.less` / `.scss` sources that produced them. The CI
+artifact already drops those (see `build.yml`).
 
-- `Themes/<Name>/` for each theme
-- `Styles/styles-v2/core.css` and `Styles/styles-v2/icons/` (Rock adds `@import`s for the
-  icon stylesheets at request time; they're untracked in Rock's repo too)
+**Don't copy `./Styles` at all.** `Styles/styles-v2/core.css` and `Styles/styles-v2/icons/`
+are Rock's own NextGen core styles, and the rest is Rock's other source — the Rock install
+on the target server already has all of it. Copying any of it would overwrite Rock's files.
 
-**Don't copy all of `./Styles`.** The rest is Rock's own source, which the server already has
-from its Rock install. Copying it would overwrite Rock's files.
-
-**Build against the same Rock version the server runs**, since `core.css` must match it.
+**Build against the same Rock version the server runs**, since theme CSS compiled here must
+match it.
 
 ## Legacy themes and `.nocompile`
 
