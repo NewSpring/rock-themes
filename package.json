@@ -1,0 +1,19 @@
+{
+  "name": "rock-themes",
+  "private": true,
+  "type": "module",
+  "description": "Rock RMS website themes (legacy LESS and NextGen Sass) plus Rock's NextGen core CSS.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "postinstall": "node scripts/sync-rock.mjs",
+    "sync": "node scripts/sync-rock.mjs",
+    "sync:reference": "node scripts/sync-rock.mjs --reference",
+    "build": "node scripts/build.mjs"
+  },
+  "devDependencies": {
+    "less": "4.2.0",
+    "sass": "1.77.6"
+  }
+}

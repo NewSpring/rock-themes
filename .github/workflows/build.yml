@@ -1,0 +1,60 @@
+name: Build themes
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: package.json
+
+      # The sparse Rock checkout only changes when .rock-version does.
+      - uses: actions/cache@v4
+        with:
+          path: .rock-src
+          key: rock-src-${{ hashFiles('.rock-version') }}
+
+      # postinstall runs `npm run sync`, which fills ./Styles from Rock at .rock-version.
+      # Once package-lock.json is committed, switch this to `npm ci`.
+      - run: npm install --no-audit --no-fund
+
+      - run: npm run build
+
+      # Only what the server needs, laid out like RockWeb/. Not all of ./Styles: the rest
+      # is Rock's own source, which the server already has from its Rock install.
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rock-themes-${{ github.sha }}
+          path: |
+            Themes/
+            Styles/styles-v2/core.css
+            Styles/styles-v2/icons/
+          if-no-files-found: error
+
+  # Deployment comes later. Rock servers are usually Windows/IIS on a private network,
+  # so a self-hosted runner on (or near) each server is the simplest route. Sketch:
+  #
+  # deploy-staging:
+  #   needs: build
+  #   if: github.ref == 'refs/heads/main'
+  #   runs-on: [self-hosted, windows, rock-staging]
+  #   environment: staging
+  #   steps:
+  #     - uses: actions/download-artifact@v4
+  #       with:
+  #         name: rock-themes-${{ github.sha }}
+  #         path: build
+  #     - shell: pwsh
+  #       run: |
+  #         robocopy build "D:\Rock\RockWeb" /E /NFL /NDL /NJH /NP
+  #         if ($LASTEXITCODE -ge 8) { exit $LASTEXITCODE } else { exit 0 }

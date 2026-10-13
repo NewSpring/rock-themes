@@ -1,0 +1,31 @@
+:root {
+
+  /* BASE VARIABLES */
+  --logo-image: url("../../../Assets/Images/rock-logo-circle-white.svg");
+
+  --base-interface-strongest: #1c1c1c;
+  --base-interface-stronger: #303030;
+  --base-interface-strong: #858585;
+  --base-interface-medium: #BBBBBB;
+  --base-interface-soft: #DDDDDD;
+  --base-interface-softer: #F5F5F5;
+  --base-interface-softest: #FFFFFF;
+
+  --base-critical: #E66713;
+  --base-danger: #D0432E;
+  --base-info: #0575F7;
+  --base-success: #6BAC43;
+
+  --base-primary: #6BAC43;
+  --base-warning: #DAA70D;
+  --base-link: #6BAC43;
+  --base-secondary: #195E38;
+  --base-tertiary: #2A4930;
+
+  --base-gender-male: #1A8AE5;
+  --base-gender-female: #DE69C3;
+
+  --font-family-serif: ff-meta-serif-web-pro, serif;
+  --font-family-sans: colfax-web, sans-serif;
+
+}

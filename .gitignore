@@ -1,0 +1,15 @@
+.DS_Store
+
+# Rock core sources (`npm run sync`) and the core.css compiled into them (`npm run build`)
+/Styles/
+/.rock-src/
+/reference/
+
+node_modules/
+*.map
+
+# Theme CSS compiled by `npm run build`. Add any other compiled file names your themes use.
+# (Not a blanket *.css, so hand-written .css files in a theme can still be committed.)
+Themes/*/Styles/theme.css
+Themes/*/Styles/bootstrap.css
+Themes/*/Styles/checkin-theme*.css
