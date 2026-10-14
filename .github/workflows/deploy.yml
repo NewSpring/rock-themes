@@ -1,7 +1,7 @@
 name: Deploy themes
 
 # One branch per environment. Each environment's VM runs a self-hosted runner labelled
-# `rock-<branch>` (see README > Deploy). To add an environment, add its branch here and
+# `<branch>-rock` (see README > Deploy). To add an environment, add its branch here and
 # register a runner with the matching label.
 on:
   push:
@@ -29,7 +29,7 @@ jobs:
 
       # build\Themes\... -> <RockWeb>\Themes\...
       # /E copies and overwrites but never deletes files removed from the repo.
-      - shell: pwsh
+      - shell: powershell
         env:
           DEPLOY_PATH: ${{ vars.DEPLOY_PATH || 'C:\inetpub\wwwroot' }}
         run: |

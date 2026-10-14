@@ -76,7 +76,7 @@ Commit `package-lock.json` after your first `npm install` and switch the workflo
 
 ## Deploy
 
-Each server environment gets its own branch (e.g. `staging`, `production`). Pushing to that
+Each server environment gets its own branch (e.g. `beta`, `production`). Pushing to that
 branch runs `.github/workflows/deploy.yml`, which builds the themes on a GitHub-hosted runner,
 then deploys the artifact with robocopy from a self-hosted runner installed on that
 environment's VM. No manual step, and no inbound ports opened on the VM.
@@ -85,11 +85,11 @@ environment's VM. No manual step, and no inbound ports opened on the VM.
 
 1. Repo **Settings > Actions > Runners > New self-hosted runner**, choose Windows / x64, and
    run the download/extract commands it shows in an admin PowerShell on the VM.
-2. Configure it with the label `rock-<branch>` and install it as a service:
+2. Configure it with the label `<branch>-rock` and install it as a service:
    ```powershell
-   .\config.cmd --url https://github.com/NewSpring/rock-themes --token <TOKEN> --labels rock-staging --runasservice --windowslogonaccount "DOMAIN\svc-gh-runner"
+   .\config.cmd --url https://github.com/NewSpring/rock-themes --token <TOKEN> --labels beta-rock --runasservice --windowslogonaccount "DOMAIN\svc-gh-runner"
    ```
-   (`rock-production` on the production VM.)
+   (`production-rock` on the production VM.)
 3. Give the service account modify rights on the RockWeb folder (default
    `D:\Rock\RockWeb`; override with a `DEPLOY_PATH` repo variable).
 
