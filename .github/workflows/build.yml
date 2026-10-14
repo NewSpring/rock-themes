@@ -2,7 +2,8 @@ name: Build themes
 
 on:
   push:
-    branches: [brian, beta, prod]
+    # Environment branches build as part of deploy.yml instead.
+    branches-ignore: [brian, beta, prod]
   pull_request:
   workflow_dispatch:
   workflow_call:
