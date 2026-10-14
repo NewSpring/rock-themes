@@ -5,7 +5,7 @@ name: Deploy themes
 # register a runner with the matching label.
 on:
   push:
-    branches: [brian, beta, production]
+    branches: [brian, beta, prod]
 
 # Never run two deploys to the same environment at once; queue instead of cancelling.
 concurrency:
