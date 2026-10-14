@@ -1,0 +1,37 @@
+name: Deploy themes
+
+# One branch per environment. Each environment's VM runs a self-hosted runner labelled
+# `rock-<branch>` (see README > Deploy). To add an environment, add its branch here and
+# register a runner with the matching label.
+on:
+  push:
+    branches: [staging, production]
+
+# Never run two deploys to the same environment at once; queue instead of cancelling.
+concurrency:
+  group: deploy-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+
+  deploy:
+    needs: build
+    runs-on: [self-hosted, windows, "rock-${{ github.ref_name }}"]
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: rock-themes-${{ github.sha }}
+          path: build
+
+      # build\Themes\... -> <RockWeb>\Themes\...
+      # /E copies and overwrites but never deletes files removed from the repo.
+      - shell: pwsh
+        env:
+          DEPLOY_PATH: ${{ vars.DEPLOY_PATH || 'D:\Rock\RockWeb' }}
+        run: |
+          robocopy build $env:DEPLOY_PATH /E /NFL /NDL /NJH /NP
+          if ($LASTEXITCODE -ge 8) { exit $LASTEXITCODE } else { exit 0 }

@@ -72,5 +72,36 @@ Deploy the new `core.css` together with the Rock upgrade.
 
 `.github/workflows/build.yml` builds on every push and pull request and uploads exactly the
 files listed under "What ships to a server" as an artifact, laid out like `RockWeb/`.
-A deploy job sketch (self-hosted Windows runner + robocopy) is in the comments.
 Commit `package-lock.json` after your first `npm install` and switch the workflow to `npm ci`.
+
+## Deploy
+
+Each server environment gets its own branch (e.g. `staging`, `production`). Pushing to that
+branch runs `.github/workflows/deploy.yml`, which builds the themes on a GitHub-hosted runner,
+then deploys the artifact with robocopy from a self-hosted runner installed on that
+environment's VM. No manual step, and no inbound ports opened on the VM.
+
+### Register a runner on each VM (one time)
+
+1. Repo **Settings > Actions > Runners > New self-hosted runner**, choose Windows / x64, and
+   run the download/extract commands it shows in an admin PowerShell on the VM.
+2. Configure it with the label `rock-<branch>` and install it as a service:
+   ```powershell
+   .\config.cmd --url https://github.com/NewSpring/rock-themes --token <TOKEN> --labels rock-staging --runasservice --windowslogonaccount "DOMAIN\svc-gh-runner"
+   ```
+   (`rock-production` on the production VM.)
+3. Give the service account modify rights on the RockWeb folder (default
+   `D:\Rock\RockWeb`; override with a `DEPLOY_PATH` repo variable).
+
+To add an environment, add its branch to `deploy.yml` and register a runner with the
+matching label.
+
+### Security
+
+This repo is public, so keep outsiders from running code on the VMs:
+
+- `deploy.yml` triggers only on `push` to the environment branches, never `pull_request`.
+- Set **Settings > Actions > General > Fork pull request workflows** to require approval for
+  all outside collaborators.
+- Restrict the runner (or its runner group) to this repo.
+- Protect the environment branches so only trusted people can push or merge to them.

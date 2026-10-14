@@ -5,6 +5,7 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+  workflow_call:
 
 jobs:
   build:
@@ -43,20 +44,5 @@ jobs:
             !Themes/**/*.scss
           if-no-files-found: error
 
-  # Deployment comes later. Rock servers are usually Windows/IIS on a private network,
-  # so a self-hosted runner on (or near) each server is the simplest route. Sketch:
-  #
-  # deploy-staging:
-  #   needs: build
-  #   if: github.ref == 'refs/heads/main'
-  #   runs-on: [self-hosted, windows, rock-staging]
-  #   environment: staging
-  #   steps:
-  #     - uses: actions/download-artifact@v4
-  #       with:
-  #         name: rock-themes-${{ github.sha }}
-  #         path: build
-  #     - shell: pwsh
-  #       run: |
-  #         robocopy build "D:\Rock\RockWeb" /E /NFL /NDL /NJH /NP
-  #         if ($LASTEXITCODE -ge 8) { exit $LASTEXITCODE } else { exit 0 }
+  # Deployment is deploy.yml: push to a server's dedicated branch (e.g. `staging`) to
+  # build and deploy to that environment's Azure VM automatically.
