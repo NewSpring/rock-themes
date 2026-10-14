@@ -1,0 +1,7 @@
+@import "../../../Styles/summernote/summernote.min.css";
+@import "../../../Styles/styles-v2/core.css";
+@import "_css-variables.css";
+
+body {
+  background-color: red;
+}

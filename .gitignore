@@ -10,6 +10,5 @@ node_modules/
 
 # Theme CSS compiled by `npm run build`. Add any other compiled file names your themes use.
 # (Not a blanket *.css, so hand-written .css files in a theme can still be committed.)
-Themes/*/Styles/theme.css
 Themes/*/Styles/bootstrap.css
 Themes/*/Styles/checkin-theme*.css
