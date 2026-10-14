@@ -5,7 +5,7 @@ name: Deploy themes
 # register a runner with the matching label.
 on:
   push:
-    branches: [staging, production]
+    branches: [brian, beta, production]
 
 # Never run two deploys to the same environment at once; queue instead of cancelling.
 concurrency:
@@ -31,7 +31,7 @@ jobs:
       # /E copies and overwrites but never deletes files removed from the repo.
       - shell: pwsh
         env:
-          DEPLOY_PATH: ${{ vars.DEPLOY_PATH || 'D:\Rock\RockWeb' }}
+          DEPLOY_PATH: ${{ vars.DEPLOY_PATH || 'C:\inetpub\wwwroot' }}
         run: |
           robocopy build $env:DEPLOY_PATH /E /NFL /NDL /NJH /NP
           if ($LASTEXITCODE -ge 8) { exit $LASTEXITCODE } else { exit 0 }
